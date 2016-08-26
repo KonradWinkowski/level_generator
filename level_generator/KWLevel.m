@@ -9,6 +9,7 @@
 #import "KWLevel.h"
 #import "KWLevelCell.h"
 #import "ShortestPathStep.h"
+#import "WallObject.h"
 
 @implementation KWLevel
 
@@ -17,8 +18,8 @@
         _levelSize = levelSize;
         _chanceToBecomeWall = 0.35;
         _floorsToWallConversion = 4;
-        _wallsToFloorConversion = 2;
-        _numberOfTransitionSteps = 2;
+        _wallsToFloorConversion = 3;
+        _numberOfTransitionSteps = 10;
         _connectedCave = NO;
     }
     
@@ -62,7 +63,11 @@
         for (uint32_t x = 0; x < self.levelSize.width; x++) {
             CGPoint coordiante = CGPointMake(x, y);
             KWLevelCell *cell = [[KWLevelCell alloc] initWithCoordinate:coordiante];
-            cell.type = [self randomNumberBetween0and1] < self.chanceToBecomeWall ? LevelCellType_Wall : LevelCellType_Floor;
+            if ([self isEdgeAtGridCoordinate:coordiante]) {
+                cell.type = LevelCellType_Wall;
+            } else {
+                cell.type = [self randomNumberBetween0and1] < self.chanceToBecomeWall ? LevelCellType_Wall : LevelCellType_Floor;
+            }
             [row addObject:cell];
         }
         
@@ -87,11 +92,22 @@
                     break;
                 }
                 case LevelCellType_Wall: {
-                    node = [SKSpriteNode spriteNodeWithColor:[SKColor blackColor] size:CGSizeMake(2, 2)];
+                    
+                    node = [WallObject basicWall];
+                    
+                    NSArray *sorrundingCells = [self adjacentCellsForCellCoordinate:CGPointMake(x, y)];
+                    for (KWLevelCell* cell in sorrundingCells){
+                        if (cell.type == LevelCellType_Floor) {
+                            [(WallObject*)node setupWallPhysics];
+                            break;
+                        }
+                    }
+                    
                     break;
                 }
                 case LevelCellType_Floor: {
-                    node = [SKSpriteNode spriteNodeWithColor:[SKColor brownColor] size:CGSizeMake(2, 2)];
+                    node = [SKSpriteNode spriteNodeWithColor:[SKColor brownColor] size:CGSizeMake(kTileSize, kTileSize)];
+                    
                     break;
                 }
                 case LevelCellType_Max: {
@@ -389,6 +405,17 @@
     return multiplier * (fabs(toCoordinate.x - fromCoordinate.x) + fabs(toCoordinate.y - fromCoordinate.y));
 }
 
+-(NSArray*)adjacentCellsForCellCoordinate:(CGPoint)cellCoordinate {
+    NSMutableArray *cells = [NSMutableArray new];
+    NSArray *cellCoordinates = [self adjacentCellsCoordinateForCellCoordinate:cellCoordinate];
+    
+    for (NSValue *v in cellCoordinates) {
+        [cells addObject:[self levelCellFromGridCoordinate:v.CGPointValue]];
+    }
+    
+    return [NSArray arrayWithArray:cells];
+}
+
 - (NSArray *)adjacentCellsCoordinateForCellCoordinate:(CGPoint)cellCoordinate
 {
     NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:4];
@@ -446,12 +473,20 @@
     return nil;
 }
 
+- (BOOL)isEdgeAtGridCoordinate:(CGPoint)coordinate
+{
+    return ((NSUInteger)coordinate.x == 0 ||
+            (NSUInteger)coordinate.x == (NSUInteger)self.levelSize.width - 1 ||
+            (NSUInteger)coordinate.y == 0 ||
+            (NSUInteger)coordinate.y == (NSUInteger)self.levelSize.height - 1);
+}
+
 -(BOOL)isValidCoordinate:(CGPoint)coordinate {
     return !(coordinate.x < 0 || coordinate.x >= self.levelSize.width || coordinate.y < 0 || coordinate.y >= self.levelSize.height);
 }
 
 -(CGPoint)positionForGirdCoordinate:(CGPoint)coordinate {
-    return CGPointMake(coordinate.x * 2, coordinate.y * 2);
+    return CGPointMake(coordinate.x * kTileSize, coordinate.y * kTileSize);
 }
 
 - (CGFloat) randomNumberBetween0and1 {

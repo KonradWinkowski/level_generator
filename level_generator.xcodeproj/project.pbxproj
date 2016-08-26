@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC5E48EA1D706F0C00A730E4 /* BasicObject.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5E48E91D706F0C00A730E4 /* BasicObject.m */; };
+		FC5E48ED1D706F3100A730E4 /* WallObject.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5E48EC1D706F3100A730E4 /* WallObject.m */; };
 		FCE65EEC1D6DC96C006C21F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EEB1D6DC96C006C21F9 /* main.m */; };
 		FCE65EEF1D6DC96C006C21F9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EEE1D6DC96C006C21F9 /* AppDelegate.m */; };
 		FCE65EF21D6DC96C006C21F9 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EF11D6DC96C006C21F9 /* GameScene.m */; };
@@ -24,6 +26,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FC5E48E81D706F0C00A730E4 /* BasicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicObject.h; sourceTree = "<group>"; };
+		FC5E48E91D706F0C00A730E4 /* BasicObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicObject.m; sourceTree = "<group>"; };
+		FC5E48EB1D706F3100A730E4 /* WallObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallObject.h; sourceTree = "<group>"; };
+		FC5E48EC1D706F3100A730E4 /* WallObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallObject.m; sourceTree = "<group>"; };
 		FCE65EE71D6DC96C006C21F9 /* level_generator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = level_generator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCE65EEB1D6DC96C006C21F9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FCE65EED1D6DC96C006C21F9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,6 +109,10 @@
 				FCE65F0A1D6DCA29006C21F9 /* KWLevelCell.m */,
 				FCE65F141D6DE825006C21F9 /* ShortestPathStep.h */,
 				FCE65F151D6DE825006C21F9 /* ShortestPathStep.m */,
+				FC5E48E81D706F0C00A730E4 /* BasicObject.h */,
+				FC5E48E91D706F0C00A730E4 /* BasicObject.m */,
+				FC5E48EB1D706F3100A730E4 /* WallObject.h */,
+				FC5E48EC1D706F3100A730E4 /* WallObject.m */,
 			);
 			path = level_generator;
 			sourceTree = "<group>";
@@ -191,7 +201,9 @@
 				FCE65EF71D6DC96C006C21F9 /* GameViewController.m in Sources */,
 				FCE65EEF1D6DC96C006C21F9 /* AppDelegate.m in Sources */,
 				FCE65F0B1D6DCA29006C21F9 /* KWLevelCell.m in Sources */,
+				FC5E48ED1D706F3100A730E4 /* WallObject.m in Sources */,
 				FCE65F081D6DC992006C21F9 /* KWLevel.m in Sources */,
+				FC5E48EA1D706F0C00A730E4 /* BasicObject.m in Sources */,
 				FCE65EF21D6DC96C006C21F9 /* GameScene.m in Sources */,
 				FCE65F0E1D6DD4B8006C21F9 /* DPad.m in Sources */,
 				FCE65F161D6DE825006C21F9 /* ShortestPathStep.m in Sources */,
@@ -348,6 +360,7 @@
 				FCE65F051D6DC96C006C21F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

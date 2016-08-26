@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Kim Pedersen. All rights reserved.
 //
 
-#import <SpriteKit/SpriteKit.h>
+#import "BasicObject.h"
 
-@interface Player : SKSpriteNode
+@interface Player : BasicObject
 
 @property (assign, nonatomic) CGPoint desiredPosition;
 @property (readonly, nonatomic) CGRect boundingRect;

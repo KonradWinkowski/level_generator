@@ -31,6 +31,8 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         // Background color
         self.backgroundColor = [SKColor colorWithRed:88.0f/255.0f green:90.0f/255.0f blue:103.0f/255.0f alpha:1.0f];
         
+        self.physicsWorld.gravity = CGVectorMake(0.0, 0.0);
+        
         // World node
         SKNode *world = [SKNode new];
         world.name = @"world";
@@ -79,7 +81,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     world.zPosition = 1;
     [self addChild:world];
     
-    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(64, 64)];
+    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(35, 35)];
     _level.name = @"level";
     _level.zPosition = 2;
     [_level generateWithSeed:2];
