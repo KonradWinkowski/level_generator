@@ -47,10 +47,23 @@
         [self removeDisconnectedCaverns];
     }
     
+    [self identifyCaverns];
+    
     [self generateTiles];
     
     NSLog(@"Generated cave in %f seconds", [[NSDate date] timeIntervalSinceDate:startDate]);
     
+}
+
+-(CGPoint)randomPositionInMainPlayArea {
+    
+    NSUInteger mainCavernIndex = [self mainCavernIndex];
+    NSArray *mainCavern = (NSArray *)self.caverns[mainCavernIndex];
+    
+    NSUInteger mainCavernCount = [mainCavern count];
+    KWLevelCell *entranceCell = (KWLevelCell *)mainCavern[arc4random() % mainCavernCount];
+    
+    return [self positionForGirdCoordinate:entranceCell.coordinate];
 }
 
 -(void)initializeGrid {

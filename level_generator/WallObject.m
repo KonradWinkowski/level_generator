@@ -16,6 +16,7 @@
 
 -(instancetype)initWithPhysics {
     if (self = [super initWithColor:[SKColor blackColor] size:CGSizeMake(kTileSize, kTileSize)]){
+        self.name = @"wall";
     }
     return self;
 }

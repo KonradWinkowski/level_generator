@@ -23,4 +23,6 @@
 
 -(void)generateWithSeed:(unsigned int)seed;
 
+-(CGPoint)randomPositionInMainPlayArea;
+
 @end

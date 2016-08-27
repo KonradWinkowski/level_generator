@@ -10,4 +10,8 @@
 
 @implementation BasicObject
 
+- (CGFloat) randomNumberBetween0and1 {
+    return random() / (float)0x7fffffff;
+}
+
 @end
