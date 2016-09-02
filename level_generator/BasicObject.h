@@ -8,7 +8,7 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-#define kTileSize 40
+#define kTileSize 2
 
 #define DEGREES_TO_RADIANS(angle) ((angle) / 180.0 * M_PI)
 

@@ -13,6 +13,7 @@ typedef NS_ENUM (NSInteger, LevelCellType)
     LevelCellType_Invalid = -1,
     LevelCellType_Wall,
     LevelCellType_Floor,
+    LevelCellType_Cooridor,
     LevelCellType_Max
 };
 

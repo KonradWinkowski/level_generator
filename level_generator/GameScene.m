@@ -8,6 +8,7 @@
 
 #import "GameScene.h"
 #import "KWLevel.h"
+#import "KWIndoorLevel.h"
 #import "Player.h"
 #import "DPad.h"
 #import "EnemyObject.h"
@@ -18,6 +19,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 @interface GameScene() <SKPhysicsContactDelegate>
 
 @property (nonatomic, strong) KWLevel *level;
+@property (nonatomic, strong) KWIndoorLevel *indoor_level;
 @property (assign, nonatomic) NSTimeInterval lastUpdateTimeInterval;
 @property (strong, nonatomic) DPad *dPad;
 @property (assign, nonatomic) BOOL isExitingLevel;
@@ -99,26 +101,32 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     world.zPosition = 1;
     [self addChild:world];
     
-    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(35, 35)];
-    _level.name = @"level";
-    _level.zPosition = 2;
-    [_level generateWithSeed:2];
-    [[self world] addChild:_level];
+    //    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(35, 35)];
+    //    _level.name = @"level";
+    //    _level.zPosition = 2;
+    //    [_level generateWithSeed:2];
+    //    [[self world] addChild:_level];
+    
+    _indoor_level = [[KWIndoorLevel alloc] initWithLevelSize:CGSizeMake(64, 64)];
+    _indoor_level.name = @"indoor_level";
+    _indoor_level.zPosition = 2;
+    [_indoor_level generateWithSeed:0];
+    [[self world] addChild:_indoor_level];
     
     NSMutableArray *temp = [NSMutableArray new];
     
-    for (int i = 0; i < 50; i++){
-        EnemyObject *enemy = [EnemyObject basicEnemy];
-        enemy.name = @"enemy";
-        enemy.zPosition = 3;
-        enemy.position = [_level randomPositionInMainPlayArea];
-        [world addChild:enemy];
-        [temp addObject:enemy];
-    }
+    //    for (int i = 0; i < 50; i++){
+    //        EnemyObject *enemy = [EnemyObject basicEnemy];
+    //        enemy.name = @"enemy";
+    //        enemy.zPosition = 3;
+    //        enemy.position = [_level randomPositionInMainPlayArea];
+    //        [world addChild:enemy];
+    //        [temp addObject:enemy];
+    //    }
     
     self.enemies = [NSArray arrayWithArray:temp];
     
-    [self player].desiredPosition = [_level randomPositionInMainPlayArea];
+    //    [self player].desiredPosition = [_level randomPositionInMainPlayArea];
     
 }
 

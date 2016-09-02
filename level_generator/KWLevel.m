@@ -11,6 +11,12 @@
 #import "ShortestPathStep.h"
 #import "WallObject.h"
 
+@interface KWLevel()
+
+@property (nonatomic, strong) NSMutableArray *caverns;
+
+@end
+
 @implementation KWLevel
 
 -(instancetype)initWithLevelSize:(CGSize)levelSize{
@@ -118,6 +124,7 @@
                     
                     break;
                 }
+                case LevelCellType_Cooridor:
                 case LevelCellType_Floor: {
                     node = [SKSpriteNode spriteNodeWithColor:[SKColor brownColor] size:CGSizeMake(kTileSize, kTileSize)];
                     
