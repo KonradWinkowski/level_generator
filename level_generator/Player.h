@@ -17,6 +17,12 @@
 @property (copy, nonatomic) NSArray *playerWalkAnimationFrames;
 @property (assign, nonatomic) NSUInteger playerAnimationID; // 0 = idle; 1 = walk
 
+@property (nonatomic, strong) SKSpriteNode *melleAttackkNode;
+
 - (void) resolveAnimationWithID:(NSUInteger)animationID;
+
+-(void)update:(CFTimeInterval)currentTime;
+
+-(CGRect)meleeAttackBox;
 
 @end

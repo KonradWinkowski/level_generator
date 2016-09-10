@@ -116,7 +116,7 @@
                     
                     NSArray *sorrundingCells = [self adjacentCellsForCellCoordinate:CGPointMake(x, y)];
                     for (KWLevelCell* cell in sorrundingCells){
-                        if (cell.type == LevelCellType_Floor) {
+                        if (cell.type == LevelCellType_Floor || cell.type == LevelCellType_Cooridor) {
                             [(WallObject*)node setupWallPhysics];
                             break;
                         }
@@ -476,7 +476,7 @@
             
             CGPoint neighborCoordinate = CGPointMake(coordiante.x + i, coordiante.y + j);
             if (![self isValidCoordinate:neighborCoordinate])
-                wallCount += 1;
+            wallCount += 1;
             else if ([self levelCellFromGridCoordinate:neighborCoordinate].type == LevelCellType_Wall) {
                 wallCount += 1;
             }
@@ -488,7 +488,7 @@
 
 -(KWLevelCell*)levelCellFromGridCoordinate:(CGPoint)coordiante {
     if ([self isValidCoordinate:coordiante])
-        return (KWLevelCell*)[[self.grid objectAtIndex:coordiante.y] objectAtIndex:coordiante.x];
+    return (KWLevelCell*)[[self.grid objectAtIndex:coordiante.y] objectAtIndex:coordiante.x];
     
     return nil;
 }

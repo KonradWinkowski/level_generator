@@ -12,11 +12,12 @@
 #import "Player.h"
 #import "DPad.h"
 #import "EnemyObject.h"
+#import "HUD.h"
 
 // Player movement constant
-static const CGFloat kPlayerMovementSpeed = 100.0f;
+static const CGFloat kPlayerMovementSpeed = 200.0f;
 
-@interface GameScene() <SKPhysicsContactDelegate>
+@interface GameScene() <SKPhysicsContactDelegate, HUDDelegate>
 
 @property (nonatomic, strong) KWLevel *level;
 @property (nonatomic, strong) KWIndoorLevel *indoor_level;
@@ -27,8 +28,6 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 @property (nonatomic, strong) EnemyObject *enemy;
 
 @property (nonatomic, strong) NSArray *enemies;
-
-@property (nonatomic, strong) SKSpriteNode *melleAttackkNode;
 
 @end
 
@@ -64,20 +63,20 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         player.desiredPosition = CGPointZero;
         [world addChild:player];
         
-        self.melleAttackkNode = [[SKSpriteNode alloc] initWithColor:[SKColor orangeColor] size:CGSizeMake(player.size.width, player.size.height * 1.5)];
-        self.melleAttackkNode.zPosition = 4;
-        self.melleAttackkNode.position = player.desiredPosition;
-        self.melleAttackkNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.melleAttackkNode.size];
-        self.melleAttackkNode.physicsBody.categoryBitMask = category_melee;
-        self.melleAttackkNode.physicsBody.contactTestBitMask = category_enemy;
-        self.melleAttackkNode.physicsBody.dynamic = NO;
-        [world addChild:self.melleAttackkNode];
+        //        self.melleAttackkNode = [[SKSpriteNode alloc] initWithColor:[SKColor orangeColor] size:CGSizeMake(player.size.width, player.size.height * 1.5)];
+        //        self.melleAttackkNode.zPosition = 4;
+        //        self.melleAttackkNode.position = player.desiredPosition;
+        //        self.melleAttackkNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:self.melleAttackkNode.size];
+        //        self.melleAttackkNode.physicsBody.categoryBitMask = category_melee;
+        //        self.melleAttackkNode.physicsBody.contactTestBitMask = category_enemy;
+        //        self.melleAttackkNode.physicsBody.dynamic = NO;
+        //        [world addChild:self.melleAttackkNode];
         
         
         // HUD
-        SKNode *hud = [SKNode node];
-        hud.name = @"hud";
+        HUD *hud = [[HUD alloc] initWithSize:self.size];
         hud.zPosition = 10;
+        hud.delegate = self;
         
         // Dpad
         _dPad = [[DPad alloc] initWithRect:CGRectMake(0, 0, 64.0f, 64.0f)];
@@ -101,7 +100,7 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     world.zPosition = 1;
     [self addChild:world];
     
-    //    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(35, 35)];
+    //    _level = [[KWLevel alloc] initWithLevelSize:CGSizeMake(64, 64)];
     //    _level.name = @"level";
     //    _level.zPosition = 2;
     //    [_level generateWithSeed:2];
@@ -115,23 +114,25 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     
     NSMutableArray *temp = [NSMutableArray new];
     
-    //    for (int i = 0; i < 50; i++){
-    //        EnemyObject *enemy = [EnemyObject basicEnemy];
-    //        enemy.name = @"enemy";
-    //        enemy.zPosition = 3;
-    //        enemy.position = [_level randomPositionInMainPlayArea];
-    //        [world addChild:enemy];
-    //        [temp addObject:enemy];
-    //    }
+    for (int i = 0; i < 15; i++){
+        EnemyObject *enemy = [EnemyObject basicEnemy];
+        enemy.name = @"enemy";
+        enemy.zPosition = 3;
+        enemy.position = [_level randomPositionInMainPlayArea];
+        [world addChild:enemy];
+        [temp addObject:enemy];
+    }
     
     self.enemies = [NSArray arrayWithArray:temp];
     
-    //    [self player].desiredPosition = [_level randomPositionInMainPlayArea];
+    [self player].desiredPosition = [_level randomPositionInMainPlayArea];
     
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
+    if ([self.hud hudTouchesBegan:touches withEvent:event]) return;
+    
     UITouch *touch = touches.anyObject;
     CGPoint screenLocation = [touch locationInView:self.view];
     CGPoint touchLocation = [touch locationInNode:[self hud]];
@@ -148,6 +149,9 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
 }
 
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    if ([self.hud hudTouchesEnded:touches withEvent:event]) return;
+    
     [_dPad removeFromParent];
     [_dPad touchesEnded:touches withEvent:event];
 }
@@ -156,8 +160,8 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     return (Player*)[[self world] childNodeWithName:@"player"];
 }
 
--(SKNode*)hud {
-    return [self childNodeWithName:@"hud"];
+-(HUD*)hud {
+    return (HUD*)[self childNodeWithName:@"hud"];
 }
 
 -(SKNode*)world {
@@ -200,18 +204,14 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
         self.player.xScale = (velocity.x > 0.0f) ? 1.0f : -1.0f;
     }
     
-    if (self.player.xScale > 0) {
-        self.melleAttackkNode.position = CGPointMake(self.player.position.x + self.melleAttackkNode.size.width, self.player.position.y);
-    } else {
-        self.melleAttackkNode.position = CGPointMake(self.player.position.x - self.melleAttackkNode.size.width, self.player.position.y);
-    }
-    
     // Ensure correct animation is playing
     self.player.playerAnimationID = (velocity.x != 0.0f) ? 1 : 0;
     [self.player resolveAnimationWithID:self.player.playerAnimationID];
     
     // Move the player to the desired position
     self.player.position = self.player.desiredPosition;
+    
+    [self.player update:currentTime];
     
     self.camera.position = self.player.position;
     
@@ -235,6 +235,22 @@ static const CGFloat kPlayerMovementSpeed = 100.0f;
     if ((body1.categoryBitMask & category_melee) != 0 && (body2.categoryBitMask & category_enemy) != 0) {
         NSLog(@"IS OUT OF RANGE OF MELEE ATTACK");
     }
+}
+
+#pragma mark - HUDDelegate
+
+-(void)didTapStealthKillButton{
+    
+    CGRect attackBox = self.player.meleeAttackBox;
+    
+    [self.physicsWorld enumerateBodiesInRect:attackBox usingBlock:^(SKPhysicsBody * _Nonnull body, BOOL * _Nonnull stop) {
+        NSLog(@"%@", body.node);
+        
+        if ([body.node.name isEqualToString:@"enemy"]){
+            [((EnemyObject*)body.node) meleeAttackEnemy];
+        }
+    }];
+    
 }
 
 @end

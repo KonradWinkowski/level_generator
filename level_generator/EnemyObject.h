@@ -25,4 +25,8 @@ typedef NS_ENUM(NSUInteger, Enemy_State)
 
 -(void)update:(CFTimeInterval)currentTime;
 
+-(void)stealthAttackEnemy;
+
+-(void)meleeAttackEnemy;
+
 @end

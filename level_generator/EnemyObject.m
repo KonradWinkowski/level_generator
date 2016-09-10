@@ -86,9 +86,12 @@
     self.physicsBody.allowsRotation = NO;
     self.physicsBody.categoryBitMask = category_enemy;
     self.physicsBody.collisionBitMask = category_wall | category_enemy | category_player;
+    self.physicsBody.linearDamping = 20.0;
 }
 
 -(void)update:(CFTimeInterval)currentTime {
+    return;
+    
     CFTimeInterval timeSinceLast = currentTime - self.lastUpdateTimeInterval;
     
     self.lastUpdateTimeInterval = currentTime;
@@ -137,6 +140,27 @@
         self.position = self.desiredPosition;
     }
     
+}
+
+-(void)damageEnemy {
+    
+}
+
+-(void)meleeAttackEnemy {
+    [self.physicsBody applyImpulse:CGVectorMake(20.0, 15.0)];
+}
+
+- (void)stealthAttackEnemy {
+    
+    // animation //
+    [self removeEnemyFromWorld];
+    
+}
+
+-(void)removeEnemyFromWorld {
+    [self removeAllActions];
+    //TODO // // tell delegate that we are removing ourselves //
+    [self removeFromParent];
 }
 
 -(BOOL)checkPathToRight {

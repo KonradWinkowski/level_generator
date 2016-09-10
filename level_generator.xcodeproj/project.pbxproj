@@ -12,6 +12,7 @@
 		FC5E49001D71BC4700A730E4 /* GameplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC5E48FF1D71BC4700A730E4 /* GameplayKit.framework */; };
 		FC5E490D1D71C35100A730E4 /* EnemyObject.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5E490C1D71C35100A730E4 /* EnemyObject.m */; };
 		FC5E49131D7485F000A730E4 /* KWIndoorLevel.m in Sources */ = {isa = PBXBuildFile; fileRef = FC5E49121D7485F000A730E4 /* KWIndoorLevel.m */; };
+		FCAF9A6D1D843A77002E4FB6 /* HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = FCAF9A6C1D843A77002E4FB6 /* HUD.m */; };
 		FCE65EEC1D6DC96C006C21F9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EEB1D6DC96C006C21F9 /* main.m */; };
 		FCE65EEF1D6DC96C006C21F9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EEE1D6DC96C006C21F9 /* AppDelegate.m */; };
 		FCE65EF21D6DC96C006C21F9 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE65EF11D6DC96C006C21F9 /* GameScene.m */; };
@@ -38,6 +39,8 @@
 		FC5E490C1D71C35100A730E4 /* EnemyObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyObject.m; sourceTree = "<group>"; };
 		FC5E49111D7485F000A730E4 /* KWIndoorLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KWIndoorLevel.h; sourceTree = "<group>"; };
 		FC5E49121D7485F000A730E4 /* KWIndoorLevel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KWIndoorLevel.m; sourceTree = "<group>"; };
+		FCAF9A6B1D843A77002E4FB6 /* HUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUD.h; sourceTree = "<group>"; };
+		FCAF9A6C1D843A77002E4FB6 /* HUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUD.m; sourceTree = "<group>"; };
 		FCE65EE71D6DC96C006C21F9 /* level_generator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = level_generator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCE65EEB1D6DC96C006C21F9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FCE65EED1D6DC96C006C21F9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -127,6 +130,8 @@
 				FC5E48EC1D706F3100A730E4 /* WallObject.m */,
 				FC5E490B1D71C35100A730E4 /* EnemyObject.h */,
 				FC5E490C1D71C35100A730E4 /* EnemyObject.m */,
+				FCAF9A6B1D843A77002E4FB6 /* HUD.h */,
+				FCAF9A6C1D843A77002E4FB6 /* HUD.m */,
 			);
 			path = level_generator;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 				FCE65F0E1D6DD4B8006C21F9 /* DPad.m in Sources */,
 				FCE65F161D6DE825006C21F9 /* ShortestPathStep.m in Sources */,
 				FCE65EEC1D6DC96C006C21F9 /* main.m in Sources */,
+				FCAF9A6D1D843A77002E4FB6 /* HUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

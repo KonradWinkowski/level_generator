@@ -9,7 +9,7 @@
 #import "KWIndoorLevel.h"
 #import "KWLevelCell.h"
 
-#define kMinRoomWidth 8
+#define kMinRoomWidth 12
 #define kMinRoohHeight 8
 
 #define kMaxRoomWidth 18
@@ -30,7 +30,7 @@
 {
     if (self = [super init]) {
         self.levelSize = size;
-        self.chanceForVerticalCooridor = 0.5;
+        self.chanceForVerticalCooridor = 0.25;
         self.chanceToConnectRooms = 0.25;
     }
     return self;
@@ -55,11 +55,42 @@
     
     [self generateRooms];
     
-    [self identifyRooms];
+    [self identifyRooms:YES];
+    
+    [self generateDoors];
+    
+    [self identifyRooms:NO];
     
     [self generateTiles];
     
     NSLog(@"Generated indoor level in %f seconds", [[NSDate date] timeIntervalSinceDate:startDate]);
+}
+
+-(CGPoint)randomPositionInMainPlayArea {
+    
+    NSUInteger mainCavernIndex = [self mainRoomIndex];
+    NSArray *mainCavern = (NSArray *)self.rooms[mainCavernIndex];
+    
+    NSUInteger mainCavernCount = [mainCavern count];
+    KWLevelCell *entranceCell = (KWLevelCell *)mainCavern[arc4random() % mainCavernCount];
+    
+    return [self positionForGirdCoordinate:entranceCell.coordinate];
+}
+
+-(NSInteger)mainRoomIndex {
+    NSInteger mainCavernIndex = -1;
+    NSUInteger maxCavernSize = 0;
+    
+    for (NSUInteger i = 0; i < self.rooms.count; i++) {
+        
+        NSUInteger caveCellCount = ((NSArray*)[self.rooms objectAtIndex:i]).count;
+        
+        if (caveCellCount > maxCavernSize) {
+            maxCavernSize = caveCellCount;
+            mainCavernIndex = i;
+        }
+    }
+    return mainCavernIndex;
 }
 
 -(void)blankOut {
@@ -81,13 +112,50 @@
 }
 
 -(void)initializeCooridors {
+    
+    NSMutableArray *startPoints = [NSMutableArray new];
+    
     for (int i = 0; i < self.numberOfCooridors; i++){
         
         // get a random start point for the cooridor //
-        CGPoint startPoint = CGPointMake(random() % (int)self.levelSize.width, random() % (int)self.levelSize.height);
-        NSLog(@"Cooridor Start = %@", NSStringFromCGPoint(startPoint));
+        BOOL validStartPoint = NO;
+        CGPoint validPoint;
         
-        CGPoint loopPoint = startPoint;
+        do {
+            CGPoint startPoint = CGPointMake(random() % (int)self.levelSize.width, random() % (int)self.levelSize.height);
+            
+            if (startPoints.count == 0){
+                validStartPoint = YES;
+            }
+            
+            for (NSValue *point in startPoints) {
+                CGPoint previousPoint = point.CGPointValue;
+                
+                if (fabs(previousPoint.y - startPoint.y) > 8){
+                    validStartPoint = YES;
+                } else {
+                    validStartPoint = NO;
+                    break;
+                }
+                
+                if (fabs(previousPoint.x - startPoint.x) > 8) {
+                    validStartPoint = YES;
+                } else {
+                    validStartPoint = NO;
+                    break;
+                }
+            }
+            
+            if (validStartPoint){
+                [startPoints addObject:[NSValue valueWithCGPoint:startPoint]];
+                validPoint = startPoint;
+            }
+            
+        } while (!validStartPoint);
+        
+        NSLog(@"Cooridor Start = %@", NSStringFromCGPoint(validPoint));
+        
+        CGPoint loopPoint = validPoint;
         
         BOOL vertical = ([self randomNumberBetween0and1] > self.chanceForVerticalCooridor) ? YES : NO;
         
@@ -147,15 +215,15 @@
             }
             
             if (vertical)
-                loopPoint = CGPointMake(loopPoint.x, loopPoint.y + 1);
+            loopPoint = CGPointMake(loopPoint.x, loopPoint.y + 1);
             else
-                loopPoint = CGPointMake(loopPoint.x + 1, loopPoint.y);
+            loopPoint = CGPointMake(loopPoint.x + 1, loopPoint.y);
         }
         
         // first well move left or down //
         isValidPoint = YES;
         shouldContinue = YES;
-        loopPoint = startPoint;
+        loopPoint = validPoint;
         
         while (isValidPoint && shouldContinue) {
             KWLevelCell *startCell = [self levelCellFromGridCoordinate:loopPoint];
@@ -208,9 +276,9 @@
             }
             
             if (vertical)
-                loopPoint = CGPointMake(loopPoint.x, loopPoint.y - 1);
+            loopPoint = CGPointMake(loopPoint.x, loopPoint.y - 1);
             else
-                loopPoint = CGPointMake(loopPoint.x - 1, loopPoint.y);
+            loopPoint = CGPointMake(loopPoint.x - 1, loopPoint.y);
         }
         
     }
@@ -225,14 +293,13 @@
         
         int roomsHeight = (int)room.count / 2;
         if (roomsHeight < kMinRoohHeight)
-            roomsHeight = (int)room.count;
+        roomsHeight = (int)room.count;
         
         int roomsWidth = (int)[[room firstObject] count] / 2;
         if  (roomsWidth < kMinRoomWidth)
-            roomsWidth = (int)[[room firstObject] count];
+        roomsWidth = (int)[[room firstObject] count];
         
         CGPoint startpoint = ((KWLevelCell*)[[room objectAtIndex:1] objectAtIndex:1]).coordinate;
-        
         
         while (shouldContinue) {
             
@@ -255,12 +322,12 @@
             }
             
             if (roomsHeight > kMinRoohHeight)
-                roomsHeight /= 2;
+            roomsHeight /= 2;
             else
-                shouldContinue = NO;
+            shouldContinue = NO;
             
             if (roomsWidth > kMinRoomWidth)
-                roomsWidth /= 2;
+            roomsWidth /= 2;
             
         }
         
@@ -303,7 +370,7 @@
                         NSLog(@"Removing number of cells = %lu", (unsigned long)temp_cells.count);
                         
                         for (KWLevelCell *cell in temp_cells)
-                            cell.type = LevelCellType_Floor;
+                        cell.type = LevelCellType_Floor;
                     } else {
                         x = xx - 1;
                     }
@@ -349,7 +416,7 @@
                         NSLog(@"Removing number of cells = %lu", (unsigned long)temp_cells.count);
                         
                         for (KWLevelCell *cell in temp_cells)
-                            cell.type = LevelCellType_Floor;
+                        cell.type = LevelCellType_Floor;
                     } else {
                         y = yy - 1;
                     }
@@ -361,15 +428,49 @@
     }
 }
 
--(void)hasSpaceAvaiableForRoom:(NSArray*)inputArea {
-    
+-(void)generateDoors {
+    for (NSArray *room in self.rooms) {
+        
+        float chanceToGenerateDoor = 0.5;
+        BOOL madeDoor = NO;
+        
+        for (int y = 0; y < 1; y++) {
+            for (int x = 0; x < [[room firstObject]count]; x++) {
+                if (madeDoor) break;
+                
+                KWLevelCell *roomCell = [[room objectAtIndex:y] objectAtIndex:x];
+                KWLevelCell *cell = [self levelCellFromGridCoordinate:CGPointMake(roomCell.coordinate.x, roomCell.coordinate.y - 2)];
+                if (cell && (cell.type == LevelCellType_Cooridor || cell.type == LevelCellType_Floor)) {
+                    KWLevelCell *wallCell = [self levelCellFromGridCoordinate:CGPointMake(roomCell.coordinate.x, roomCell.coordinate.y - 1)];
+                    if (wallCell && wallCell.type == LevelCellType_Wall && [self randomNumberBetween0and1] > chanceToGenerateDoor) {
+                        wallCell.type = LevelCellType_Floor;
+                        madeDoor = YES;
+                        break;
+                        
+                    }
+                }
+                
+                roomCell = [[room lastObject] objectAtIndex:x];
+                cell = [self levelCellFromGridCoordinate:CGPointMake(roomCell.coordinate.x, roomCell.coordinate.y + 3)];
+                if (cell.type == LevelCellType_Cooridor || cell.type == LevelCellType_Floor) {
+                    KWLevelCell *wallCell = [self levelCellFromGridCoordinate:CGPointMake(roomCell.coordinate.x, roomCell.coordinate.y + 2)];
+                    if (wallCell && wallCell.type == LevelCellType_Wall && [self randomNumberBetween0and1] < chanceToGenerateDoor) {
+                        wallCell.type = LevelCellType_Floor;
+                        madeDoor = YES;
+                        break;
+                        
+                    }
+                }
+            }
+        }
+    }
 }
 
 -(void)floodFillRooms:(NSMutableArray*)array fromCoordinate:(CGPoint)coordinate fillNumber:(NSUInteger)fillNumber {
     
     KWLevelCell *cell = (KWLevelCell*)[[array objectAtIndex:coordinate.y] objectAtIndex:coordinate.x];
     
-    if (cell.type != LevelCellType_Floor) return;
+    if (cell.type != LevelCellType_Floor && cell.type != LevelCellType_Cooridor) return;
     
     cell.type = fillNumber;
     
@@ -424,7 +525,7 @@
     
 }
 
--(void)identifyRooms{
+-(void)identifyRooms:(BOOL)ordered{
     self.rooms = [NSMutableArray new];
     
     NSMutableArray *floodFillArray = [NSMutableArray arrayWithCapacity:self.levelSize.height];
@@ -455,7 +556,40 @@
         }
     }
     
-    NSLog(@"Number of rooms in floor space: %lu", (unsigned long)[self.rooms count]);
+    if (ordered) {
+        // grid up //
+        NSMutableArray *temp = [NSMutableArray new];
+        
+        for (NSArray *room in self.rooms) {
+            int y_index = ((KWLevelCell*)[room firstObject]).coordinate.y;
+            
+            NSMutableArray *rows = [NSMutableArray new];
+            NSMutableArray *column = [NSMutableArray new];
+            
+            for (KWLevelCell *cell in room) {
+                if (cell.coordinate.y == y_index) {
+                    [column addObject:cell];
+                }
+                else {
+                    [column sortUsingComparator:^NSComparisonResult(KWLevelCell*  _Nonnull obj1, KWLevelCell*   _Nonnull obj2) {
+                        return obj2.coordinate.x < obj1.coordinate.x;
+                    }];
+                    
+                    [rows addObject:column];
+                    
+                    column = [NSMutableArray new];
+                    [column addObject:cell];
+                    y_index = cell.coordinate.y;
+                }
+            }
+            
+            [temp addObject:rows];
+        }
+        
+        self.rooms = temp;
+    }
+    
+    NSLog(@"Number of rooms in floor plan: %lu", (unsigned long)[self.rooms count]);
 }
 
 
