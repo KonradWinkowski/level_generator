@@ -107,6 +107,7 @@ static const CGFloat kPlayerMovementSpeed = 200.0f;
     //    [[self world] addChild:_level];
     
     _indoor_level = [[KWIndoorLevel alloc] initWithLevelSize:CGSizeMake(64, 64)];
+//     [[self world] addChild:_indoor_level];
     _indoor_level.name = @"indoor_level";
     _indoor_level.zPosition = 2;
     [_indoor_level generateWithSeed:0];
@@ -114,16 +115,16 @@ static const CGFloat kPlayerMovementSpeed = 200.0f;
     
     NSMutableArray *temp = [NSMutableArray new];
     
-    for (int i = 0; i < 15; i++){
-        EnemyObject *enemy = [EnemyObject basicEnemy];
-        enemy.name = @"enemy";
-        enemy.zPosition = 3;
-        enemy.position = [_level randomPositionInMainPlayArea];
-        [world addChild:enemy];
-        [temp addObject:enemy];
-    }
-    
-    self.enemies = [NSArray arrayWithArray:temp];
+//    for (int i = 0; i < 15; i++){
+//        EnemyObject *enemy = [EnemyObject basicEnemy];
+//        enemy.name = @"enemy";
+//        enemy.zPosition = 3;
+//        enemy.position = [_level randomPositionInMainPlayArea];
+//        [world addChild:enemy];
+//        [temp addObject:enemy];
+//    }
+//    
+//    self.enemies = [NSArray arrayWithArray:temp];
     
     [self player].desiredPosition = [_level randomPositionInMainPlayArea];
     
